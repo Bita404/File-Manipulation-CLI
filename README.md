@@ -1,1 +1,3 @@
 # File-Manipulation-CLI
+## requirments 
+
