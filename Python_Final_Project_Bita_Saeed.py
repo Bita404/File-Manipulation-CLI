@@ -5,21 +5,21 @@ import os
 
 def setup():
     parser = argparse.ArgumentParser(description="File Manipulation CLI")
-    
+    ####++++++++++ commands as arguments
     parser.add_argument("--ls", help="List directory contents at [path]")
-    parser.add_argument("--cd", action="store_true", help="Change the working directory to [path]")
-    parser.add_argument("--mkdir", action="store_true", help="Create a new directory at [path]")
-    parser.add_argument("--rmdir", action="store_true", help="Remove the directory at [path] if its empty")
-    parser.add_argument("--rm", action="store_true", help="Remove the file specified by [file]")
-    parser.add_argument("--rm-r", action="store_true", help="Remove the directory at [directory]")
+    parser.add_argument("--cd", help="Change the working directory to [path]")
+    parser.add_argument("--mkdir", help="Create a new directory at [path]")
+    parser.add_argument("--rmdir", help="Remove the directory at [path] if its empty")
+    parser.add_argument("--rm", help="Remove the file specified by [file]")
+    parser.add_argument("--rm-r", help="Remove the directory at [directory]")
     parser.add_argument("--cp",nargs=2, help="Copy a file or directory from source to destination")
     parser.add_argument("--mv",nargs=2,  help="move file from [source] to [destination]")
     parser.add_argument("--find",nargs=2, help="Search for files or directories")
     parser.add_argument("--cat",nargs=2, help="Output the contents of the file")
-    parser.add_argument("--show-logs", help="shows all logs with realtime")
+    parser.add_argument("--show-logs",action="store_true", help="shows all logs with realtime")
     return parser
 
-############  write a file and add commands history with realtimes in it   ##############
+############  write a file and add cmd history with realtimes in it   ##############
 
 def write_log(cmd):
     with open("commands.log" , "a") as file:
@@ -29,15 +29,16 @@ def write_log(cmd):
      file.write(text)   
      
 #######////////////////////++++++++  commands functions  ++++++++\\\\\\\\\\\\\\\\\\\\############ 
-       
+########## --show-logs      
 def show_log(file_name = "commands.log"):
     try :
         with open(file_name, "r") as file1:
            data = file1.read()
         print(data)
     except FileNotFoundError:
-        print("No file for commands log !!!!! ")
-    
+        print("Commands log File NOT Found ! ! !   (⩺_⩹) ")
+        
+######### --ls 
 def list(path):
     file_name =[]
     try:
@@ -46,24 +47,66 @@ def list(path):
             f_path = os.path.join(path ,f)
             file_name.append(f_path)
       if not file_name:
-          print("No files found in this directory :( )")
+          print("No Files Found in this directory !!!  (⩺_⩹) ")
       for file in file_name :
          print(file) 
          
     except Exception as e:
-       print(f"Error: {e}")
+       print(f"Error ! ! ! : {e}")
            
-    
-def chnge_dir_path():
-    pass
-def make_dir():
-    pass
-def remove_empty_dir():
-    pass
-def remove_file():
-    pass
-def remove_dir():
-    pass
+######## --cd
+def chnge_dir_path(path):
+    try :
+        os.chdir(path)
+        print(f"Changed working directory path to: {path} succesfully !")
+    except FileNotFoundError:
+        print(f"'{path}' Directory Not Found !   （＞д＜） ")
+    except NotADirectoryError:
+        print(f"'{path}' is Not a Directory !   ☜(`o´)  ")    
+        
+############# --mkdir        
+def make_dir(path): 
+    try :
+        os.mkdir(path)
+        print(f"Directory made in'{path}' Succesfully ")
+    except FileExistsError:
+        print(f"Directory '{path}' already exists !!!ʅ(°ヮ°)ʃ") 
+    except PermissionError:
+            print(f"Permission denied !!!!  Cannot Create Directory '{path}'  !!ʅ(°ヮ°)ʃ .")   
+               
+############# --rmdir        
+def remove_empty_dir(path):
+    try:
+        os.rmdir(path)
+        print(f"The Empty '{path}' Directory Removed successfully !!! ")
+    except FileNotFoundError:
+        print(f"Directory '{path}' Not Found !  !!ʅ(°ヮ°)ʃ")
+    except OSError:
+        print(f"'{path}' is Not empty or Cant Be Removed ! !!ʅ(°ヮ°)ʃ")
+        
+############# --rm
+def remove_file(path):
+    try:
+        os.remove(path)
+        print(f"File '{path}' Removed Succesfully")
+    except FileNotFoundError:
+        print(f"File '{path}' not found !!!  ʅ(°ヮ°)ʃ ")
+        
+############  --rm-r    
+def remove_dir(path):
+    try:
+        for p , dirs, files in os.walk(path, topdown=False):
+            for file in files:
+                os.remove(os.path.join(p, file))
+            for dir in dirs:
+                os.rmdir(os.path.join(p, dir))
+        os.rmdir(path)
+        print(f"Directory '{path}' and its contents Removed Successfully!")
+    except FileNotFoundError:
+        print(f"Directory '{path}' Not Found ! ! !  ʅ(°ヮ°)ʃ")
+    except Exception as e:
+        print(f"Error!!!!  ʅ(°ヮ°)ʃ: {e}")
+        
 def copy():
     pass
 def move_file():
@@ -82,11 +125,30 @@ args = parser.parse_args()
 cmd = " ".join(sys.argv)
 #print(args)
 write_log(cmd)
-#show_log()
 
 ##############++++++++++++           using the functions            ++++++++++++++++++#############
 
 if args.ls :
     list(args.ls)
 elif args.cd:
+    chnge_dir_path(args.cd)
+elif args.mkdir :
+    make_dir(args.mkdir)
+elif args.rmdir:
     pass
+elif args.rm :
+    remove_file(args.rm)
+elif args.rm_r :
+    remove_dir(args.rm_r)
+elif args.cp :
+    pass
+elif args.mv :
+    pass
+elif args.find :
+    pass
+elif args.cat :
+    pass
+elif args.show_logs :
+    show_log()
+else :
+    print("Invalid Command!!!!ʅ(°ヮ°)ʃ ")        
