@@ -84,7 +84,7 @@ def remove_empty_dir(path):
     except OSError:
         print(f"'{path}' is Not empty or Cant Be Removed ! !!ʅ(°ヮ°)ʃ")
         
-############# --rm
+############# --rm   [file]
 def remove_file(path):
     try:
         os.remove(path)
@@ -107,12 +107,25 @@ def remove_dir(path):
     except Exception as e:
         print(f"Error!!!!  ʅ(°ヮ°)ʃ: {e}")
         
-def copy():
-    pass
+#############   --cp        
+def copy(source , destination):
+    try :
+        for p , dirs, files in os.walk(source):
+            
+        
 def move_file():
     pass
-def find():
-    pass
+
+############ --find
+def find(path,pattern):
+    try:
+        for p, dirs, files in os.walk(path):
+            for file in files:
+                if pattern in file:
+                    print(os.path.join(p, file))
+    except Exception as e:
+        print(f"Error: {e}")
+    
 def output_content():
     pass
 
@@ -151,4 +164,4 @@ elif args.cat :
 elif args.show_logs :
     show_log()
 else :
-    print("Invalid Command!!!!ʅ(°ヮ°)ʃ ")        
+    print("Enter a right command !!!!ʅ(°ヮ°)ʃ ")        
