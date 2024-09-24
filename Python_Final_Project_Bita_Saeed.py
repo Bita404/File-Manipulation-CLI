@@ -125,9 +125,17 @@ def find(path,pattern):
                     print(os.path.join(p, file))
     except Exception as e:
         print(f"Error: {e}")
-    
-def output_content():
-    pass
+
+############# --cat 
+def output_content(file):
+    try:
+        with open(file, 'r') as f:
+            content = f.read()
+            print(content)
+    except FileNotFoundError:
+        print(f"File '{file}' Not Found ! ! !   ! !  ʅ(°ヮ°)ʃ ")
+    except Exception as e:
+        print(f"Error!!!!!: {e}")
 
 
 
@@ -148,7 +156,7 @@ elif args.cd:
 elif args.mkdir :
     make_dir(args.mkdir)
 elif args.rmdir:
-    pass
+    remove_dir(args.rmdir)
 elif args.rm :
     remove_file(args.rm)
 elif args.rm_r :
@@ -158,9 +166,9 @@ elif args.cp :
 elif args.mv :
     pass
 elif args.find :
-    pass
+    find(args.find)
 elif args.cat :
-    pass
+    output_content(args.cat)
 elif args.show_logs :
     show_log()
 else :
