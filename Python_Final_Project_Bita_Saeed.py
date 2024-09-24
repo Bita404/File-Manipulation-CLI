@@ -19,14 +19,14 @@ def setup():
     parser.add_argument("--show-logs",action="store_true", help="shows all logs with realtime")
     return parser
 
-############  write a file and add cmd history with realtimes in it   ##############
+############  write a file and add cmd history with realtimes and output if output  ##############
 
-def write_log(cmd):
+def write_log(cmd, outcome=True):
     with open("commands.log" , "a") as file:
      time_now = datetime.datetime.now()
      time_now = time_now.strftime("%d/%m/%Y--%I:%M-%p")
-     text = f"{cmd}: {time_now} \n"
-     file.write(text)   
+     text =f"{cmd}: {time_now} \n"
+     file.write(text)
      
 #######////////////////////++++++++  commands functions  ++++++++\\\\\\\\\\\\\\\\\\\\############ 
 ########## --show-logs      
@@ -107,14 +107,55 @@ def remove_dir(path):
     except Exception as e:
         print(f"Error!!!!  ʅ(°ヮ°)ʃ: {e}")
         
-#############   --cp        
-def copy(source , destination):
-    try :
-        for p , dirs, files in os.walk(source):
-            
+#############   --cp  both file and dir  
+####......... for directory ........########     
+def copy_dir(source , destination):
+    try:
+        os.mkdir(destination) 
+        for item in os.listdir(source):
+            s = os.path.join(source, item)
+            d = os.path.join(destination, item)
+            if os.path.isdir(s):
+                #... recursive function ...#
+                copy_dir(s, d) 
+            else:
+                copy_dir(s, d)  
+        print(f"Copied directory '{source}' to '{destination}' Successfully !")
+    except FileExistsError:
+        print(f"directory in '{destination}' Already Exists ! !  ʅ(°ヮ°)ʃ ")
+    except FileNotFoundError:
+        print(f"Source directory '{source}' Not Found !   ʅ(°ヮ°)ʃ")
+    except PermissionError:
+        print(f"Permission Denied for copying '{source}' to '{destination}' !   ʅ(°ヮ°)ʃ !")
+    except Exception as e:
+        print(f"Error !!!!! : {e}")
         
-def move_file():
-    pass
+########........ for file .....########        
+def copy_file(source, destination):
+    try:
+        with open(source, 'rb') as src, open(destination, 'wb') as dest:
+            dest.write(src.read())
+        print(f"File '{source}' copied to '{destination}' Successfully ! !")
+    except Exception as e:
+        print(f"Error copying file !   ʅ(°ヮ°)ʃ ! : {e}")
+#####<<<<< main function for copy file AND dir >>>>>########         
+def copy(source, destination):
+    if os.path.isdir(source):
+        copy_dir(source, destination)
+    else:
+        copy_file(source, destination)
+            
+############  --mv       
+def move_file(source ,destination):
+    try:
+         os.replace(source, destination)  
+         print(f"Moved '{source}' to '{destination}' successfully ! ! ! ")
+    except FileNotFoundError:
+        print(f"'{source}' source Not Found ! !  !  ʅ(°ヮ°)ʃ ")
+    except IsADirectoryError:
+        print(f"'{source}' Is a Directory ! !  ʅ(°ヮ°)ʃ  ")
+    except Exception as e:
+        print(f"Error !!!ʅ(°ヮ°)ʃ: {e}")
 
 ############ --find
 def find(path,pattern):
@@ -138,38 +179,37 @@ def output_content(file):
         print(f"Error!!!!!: {e}")
 
 
-
-
 parser = setup()
 args = parser.parse_args()
 ### store user commands 
 cmd = " ".join(sys.argv)
 #print(args)
 write_log(cmd)
-
 ##############++++++++++++           using the functions            ++++++++++++++++++#############
 
 if args.ls :
-    list(args.ls)
+     list(args.ls)
 elif args.cd:
-    chnge_dir_path(args.cd)
+     chnge_dir_path(args.cd)
 elif args.mkdir :
-    make_dir(args.mkdir)
+     make_dir(args.mkdir)
 elif args.rmdir:
-    remove_dir(args.rmdir)
+     remove_dir(args.rmdir)
 elif args.rm :
-    remove_file(args.rm)
+     remove_file(args.rm)
 elif args.rm_r :
-    remove_dir(args.rm_r)
+     remove_dir(args.rm_r)
 elif args.cp :
-    pass
+     copy(args.cp[0],args.cp[1])
 elif args.mv :
-    pass
+     move_file(args.mv[0],args.mv[1])
 elif args.find :
-    find(args.find)
+     find(args.find[0],args.find[1])
 elif args.cat :
-    output_content(args.cat)
+     output_content(args.cat)
 elif args.show_logs :
-    show_log()
+     show_log()
 else :
-    print("Enter a right command !!!!ʅ(°ヮ°)ʃ ")        
+    print("Enter a command !!!!ʅ(°ヮ°)ʃ ")   
+    
+         
