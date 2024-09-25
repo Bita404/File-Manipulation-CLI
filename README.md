@@ -4,7 +4,7 @@ we introduced the commands by using argparse library it can aslo show the comman
 each commands has its own function and errors are almost handled.
 ## requirments 
 - python 3 .
-- os , sys , argparse ,datetime libraries .
+- os , sys , argparse ,datetime liberaries .
 ## Usage
 File handling 
 - "--ls" --> List directory contents at [path]
