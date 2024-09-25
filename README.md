@@ -7,5 +7,16 @@ each commands has its own function and errors are almost handled.
 - os , sys , argparse ,datetime libraries
 ## Usage
 File handling 
+- "--ls" --> List directory contents at [path]
+- "--cd"--> Change the working directory to [path]
+- "--mkdir" --> Create a new directory at [path]
+- "--rmdir" --> Remove the directory at [path] if its empty
+- "--rm" --> Remove the file specified by [file]
+- "--rm-r"--> Remove the directory at [directory]
+- "--cp" --> Copy a file or directory from source to destination
+- "--mv" --> move file from [source] to [destination]
+- "--find" --> Search for files or directories
+- "--cat" --> Output the contents of the file
+- "--show-logs" --> shows all logs with realtime
 ## Outputs
 
