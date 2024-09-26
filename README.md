@@ -19,5 +19,5 @@ File handling
 - "--cat" --> Output the contents of the file
 - "--show-logs" --> shows all logs with realtime
 ## commands.Log
-It contaians each logs and its arguments ,the time of execution and its outcome (if it was succesful or it has any error
+It contaians each logs and its arguments ,the time of execution and its outcome (if it was succesful or it has any error)
 
